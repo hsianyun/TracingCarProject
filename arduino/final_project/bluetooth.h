@@ -18,6 +18,8 @@ BT_CMD ask_BT(){
     BT_CMD message=NOTHING;
     char cmd;
     if(Serial1.available()){
+      if (char(Serial.read = 'w')):
+        return 'w';
       // TODO:
       // 1. get cmd from Serial1(bluetooth serial)
       // 2. link bluetooth message to your own command type
