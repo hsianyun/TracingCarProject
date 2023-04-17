@@ -43,7 +43,7 @@ class Maze:
         elif isinstance(nd, int):
             start_node = self.nd_dict[nd]
         else:
-            print("Parameter 'nd' wrong type!")
+            print("Error: Parameter 'nd' wrong type!")
             return 0
         
         bfs_queue = [start_node]
@@ -58,7 +58,7 @@ class Maze:
                     nd = int(nd)
                     if (not cur.isSuccessor(self.nd_dict[nd])) and len(self.nd_dict[nd].getSuccessors()) == 0:
                         self.nd_dict[nd].copySuccessors(cur)
-                        self.nd_dict[nd].setSuccessor(cur, Node.reverseDir(adjacency_nd.index(nd)+1), cur.getSuccessors()[-1][-1] +1)
+                        self.nd_dict[nd].setSuccessor(cur, Direction(adjacency_nd.index(nd)+1), cur.getSuccessors()[-1][-1] +1)
                         bfs_queue.append(self.nd_dict[nd])
                         search_count += 1
                 except:
@@ -100,7 +100,7 @@ class Maze:
                     nd = int(nd)
                     if (not cur.isSuccessor(self.nd_dict[nd])) and len(self.nd_dict[nd].getSuccessors()) == 0:
                         self.nd_dict[nd].copySuccessors(cur)
-                        self.nd_dict[nd].setSuccessor(cur, Node.reverseDir(adjacency_nd.index(nd)+1), cur.getSuccessors()[-1][-1] +1)
+                        self.nd_dict[nd].setSuccessor(cur, Direction(adjacency_nd.index(nd)+1), cur.getSuccessors()[-1][-1] +1)
                         bfs_queue.append(self.nd_dict[nd])
                 except:
                     pass
