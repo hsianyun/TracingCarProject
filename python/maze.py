@@ -20,7 +20,7 @@ class Maze:
 		# For example, when parsing raw_data, you may create several Node objects.  
 		# Then you can store these objects into self.nodes.  
 		# Finally, add to nd_dict by {key(index): value(corresponding node)}
-        self.raw_data = pd.read_csv(filepath).values
+        self.raw_data = pd.read_csv(filepath).values    #generate lists
         self.nodes = [Node(int(raw_node[0]), raw_node[1:5]) for raw_node in self.raw_data]
         self.nd_dict = dict()  # key: index, value: the correspond node
         for node in self.nodes:
@@ -51,19 +51,59 @@ class Maze:
 
         while len(bfs_queue) > 0:
             cur = bfs_queue.pop(0)
-            adjacency_nd = cur.getAdjacency()
+            adjacency_nd = list(cur.getAdjacency())
+            search_count = 0
             for nd in adjacency_nd:
                 try:
-                    self.nd_dict[nd].setSuccessor(cur, Node.reverseDir(adjacency_nd.index(nd), ))
+                    nd = int(nd)
+                    if (not cur.isSuccessor(self.nd_dict[nd])) and len(self.nd_dict[nd].getSuccessors()) == 0:
+                        self.nd_dict[nd].copySuccessors(cur)
+                        self.nd_dict[nd].setSuccessor(cur, Node.reverseDir(adjacency_nd.index(nd)+1), cur.getSuccessors()[-1][-1] +1)
+                        bfs_queue.append(self.nd_dict[nd])
+                        search_count += 1
                 except:
                     pass
-            bfs_queue += [self.nd_dict]
-            pass
+
+            if search_count == 0:   #find deadend
+                node_sequence = [successor[0] for successor in cur.Successors[1:]] + [cur]
+                return node_sequence
+
+            
         return None
 
     def BFS_2(self, nd_from, nd_to):
         # TODO : similar to BFS but with fixed start point and end point
         # Tips : return a sequence of nodes of the shortest path
+        if isinstance(nd_from, Node):
+            start_node = nd_from
+            end_node = nd_to
+        elif isinstance(nd_from, int):
+            start_node = self.nd_dict[nd_from]
+            end_node = self.nd_dict[nd_to]
+        else:
+            print("Parameter 'nd' wrong type!")
+            return 0
+        
+        bfs_queue = [start_node]
+        start_node.Successors=[(None, None, 0)] #initiallize the start node
+
+        while len(bfs_queue) > 0:
+            cur = bfs_queue.pop(0)
+
+            if cur == end_node:
+                node_sequence = [successor[0] for successor in cur.Successors[1:]] + [cur]
+                return node_sequence
+            
+            adjacency_nd = list(cur.getAdjacency())
+            for nd in adjacency_nd:
+                try:
+                    nd = int(nd)
+                    if (not cur.isSuccessor(self.nd_dict[nd])) and len(self.nd_dict[nd].getSuccessors()) == 0:
+                        self.nd_dict[nd].copySuccessors(cur)
+                        self.nd_dict[nd].setSuccessor(cur, Node.reverseDir(adjacency_nd.index(nd)+1), cur.getSuccessors()[-1][-1] +1)
+                        bfs_queue.append(self.nd_dict[nd])
+                except:
+                    pass
 
         return None
 

@@ -1,17 +1,26 @@
-import pandas as pd
+# import pandas as pd
 
-filepath = r"d:\Coding_Projects\sample_code\python\data\small_maze.csv"
-raw_data = pd.read_csv(filepath).values
-print(raw_data)
-nodes = [(raw_node[0], raw_node[1:5]) for raw_node in raw_data]
-print(nodes)
-# from enum import IntEnum
+# filepath = r"d:\Coding_Projects\sample_code\python\data\small_maze.csv"
+# raw_data = pd.read_csv(filepath).values
+# print(raw_data)
+# print(isinstance(raw_data[0][1], int))
+# print(type(raw_data[0][1]))
+# # from enum import IntEnum
 
-# class Direction(IntEnum):
-#     NORTH = 1
-#     SOUTH = 2
-#     WEST  = 3
-#     EAST  = 4
+# # class Direction(IntEnum):
+# #     NORTH = 1
+# #     SOUTH = 2
+# #     WEST  = 3
+# #     EAST  = 4
 
-# d = Direction(1)
-# print(d)
+# # d = Direction(1)
+# # print(d)
+
+from maze import Maze
+
+filepath = r"d:\Coding_Projects\sample_code\python\data\maze.csv"
+maze1 = Maze(filepath)
+bfs_list = maze1.BFS(5)
+# print(maze1.nd_dict)
+bfs_index = [nd.getIndex() for nd in bfs_list ]
+print(bfs_index)

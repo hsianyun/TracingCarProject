@@ -1,4 +1,5 @@
 from enum import IntEnum
+import copy
 
 # You can get the enumeration based on integer value, or make comparison
 # ex: d = Direction(1), then d would be Direction.NORTH
@@ -28,6 +29,9 @@ class Node:
         self.Successors.append((successor, Direction(direction), int(length)))
         print("For Node {}, a successor {} is set.".format(self.index, self.Successors[-1]))
         return
+    
+    def copySuccessors(self, nd):
+        self.Successors = copy.deepcopy(nd.getSuccessors())
 
     def getAdjacency(self):
         return self.adjacency_nd
