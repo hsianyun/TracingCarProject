@@ -42,7 +42,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);  // 建立MFRC522物件
 void setup()
 {
    //bluetooth initialization
-   Serial1.begin(9600);
+   Serial3.begin(9600);
    //Serial window
    Serial.begin(9600);
    //RFID initial
@@ -97,17 +97,26 @@ void loop()
 void SetState()
 {
   // TODO:
-  int direction = ask_BT();
-  if (direction != 0) state = true;
-  else  state = false;
-  tracking(digitalRead(IRpin_LL), digitalRead(IRpin_L), digitalRead(IRpin_M), digitalRead(IRpin_R), digitalRead(IRpin_RR));
-  delay(5);
+//  int direction = ask_BT();
+//  if (direction != 0) state = true;
+//  else  state = false;
+  state = true;
+  
+  int l2 = digitalRead(IRpin_LL), l1 = digitalRead(IRpin_L), m0 = digitalRead(IRpin_M), r1 = digitalRead(IRpin_R), r2 = digitalRead(IRpin_RR);
+
+  
+  tracking(l2, l1, m0, r1, r2);
+  if (in_the_node(l2, l1, m0, r1, r2))  right_turn();
   // 1. Get command from bluetooth 
   // 2. Change state if need
 }
 
 void Search()
 {
+  byte *idSize = new byte[4];
+  if (rfid(*idSize) != 0) {
+    send_byte(rfid(*idSize), *idSize);
+  }
   // TODO: let your car search graph(maze) according to bluetooth command from computer(python code)
 }
 /*===========================define function===========================*/

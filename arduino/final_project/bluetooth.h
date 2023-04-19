@@ -17,16 +17,16 @@ enum BT_CMD {
 BT_CMD ask_BT(){
     BT_CMD message=NOTHING;
     char cmd;
-    if(Serial1.available()){
-      if (char(Serial.read() == 'w'))
+    if(Serial3.available()){
+      if (Serial3.read() == 'w')
         message = FORWARD;
-      else if (char(Serial.read() == 'a'))
+      else if (Serial3.read() == 'a')
         message = LEFT;
-      else if (char(Serial.read() == 's'))
+      else if (Serial3.read() == 's')
         message = BACKWORD;
-      else if (char(Serial.read() == 'd'))
+      else if (Serial3.read() == 'd')
         message = RIGHT;
-      cmd = Serial.read();
+      cmd = Serial3.read();
       #ifdef DEBUG
       Serial.print("cmd : ");
       Serial.println(cmd);
@@ -35,18 +35,18 @@ BT_CMD ask_BT(){
     return message;
 }// ask_BT
 
-// send msg back through Serial1(bluetooth serial)
+// send msg back through Serial3(bluetooth serial)
 // can use send_byte alternatively to send msg back
 // (but need to convert to byte type)
 void send_msg(const char& msg)
 {
-  Serial1.write(msg);
+  Serial3.write(msg);
 }// send_msg
 
-// send UID back through Serial1(bluetooth serial)
+// send UID back through Serial3(bluetooth serial)
 void send_byte(byte *id, byte& idSize) {
   for (byte i = 0; i < idSize; i++) {  // Send UID consequently.
-    Serial1.write(id[i]);
+    Serial3.write(id[i]);
   }
   #ifdef DEBUG
   Serial.print("Sent id: ");
