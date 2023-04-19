@@ -3,7 +3,8 @@ from BTinterface import BTinterface
 import BT
 object = BTinterface()
 object.start()
-for i in range(1000):
+while(True):
     if (object.ser.SerialReadString()):
-        print(object.ser.SerialReadString())
-print('over')
+        print('read string', object.ser.SerialReadString())
+    if(object.ser.SerialReadByte()):
+        print('rfid', object.ser.SerialReadByte())
