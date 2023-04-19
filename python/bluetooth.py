@@ -1,7 +1,8 @@
+
 from BTinterface import BTinterface
 import BT
 object = BTinterface()
 object.start()
-while(True):
-    if (object.ser.SerialReadString):
-        print(object.ser.SerialReadString)
+for i in range(10000):
+    if (object.ser.SerialReadString()):
+        print(object.ser.SerialReadString())
