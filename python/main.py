@@ -9,8 +9,8 @@ import sys
 import os
 
 def main():
-    maze = mz.Maze("data/small_maze.csv")
-    point = Scoreboard("your team name", "ask TA for ip")
+    maze = mz.Maze("./python/data/small_maze.csv") 
+    point = Scoreboard("Team Eric, Sam, and Dhgf", "ask TA for ip")
     # point = ScoreboardFake("your team name", "data/fakeUID.csv")
     interf = BTinterface()
     # TODO : Initialize necessary variables
