@@ -23,6 +23,7 @@ class BTinterface:
         return self.ser.SerialReadByte()
 
     def send_action(self,dirc):
+        
         # TODO : send the action to car
         return
 

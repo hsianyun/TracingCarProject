@@ -96,6 +96,7 @@ void loop()
 
 void SetState()
 {
+  
   // TODO:
   // 1. Get command from bluetooth 
   // 2. Change state if need
