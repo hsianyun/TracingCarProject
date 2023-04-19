@@ -18,9 +18,11 @@
 
 from maze import Maze
 
-filepath = r"d:\Coding_Projects\sample_code\python\data\maze.csv"
+filepath = r".\python\data\maze_8by6.csv"
 maze1 = Maze(filepath)
-bfs_list = maze1.BFS(5)
+bfs_list = maze1.BFS_2(3,48)
 # print(maze1.nd_dict)
 bfs_index = [nd.getIndex() for nd in bfs_list ]
 print(bfs_index)
+cmd = maze1.getActions(bfs_list)
+print(cmd)

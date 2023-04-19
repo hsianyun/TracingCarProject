@@ -36,10 +36,10 @@ void loop() {
   for (int i = 0; i < 5; i++) {
     IR_val[i] = digitalRead(IR[i]);
     black_count += IR_val[i];
-    Serial.print("IR No.");
-    Serial.print(i);
-    Serial.print(" Status: ");
-    Serial.println(IR_val[i]);
+    // Serial.print("IR No.");
+    // Serial.print(i);
+    // Serial.print(" Status: ");
+    // Serial.println(IR_val[i]);
   }
 
   if (black_count >= 4){
@@ -47,29 +47,29 @@ void loop() {
       vL =  200;
       vR = -200;
       MotorWriting(vL, vR);
-      delay(500);   //Needed to be modified.
+      delay(1000);   //Needed to be modified.
       isfromCenter = false;
     }else if(isStart){    //Special case for the car just start and it needs to walk out from first node.
       vL = 200;
       vR = 200;
       MotorWriting(vL, vR);
     }else{                //If the car is in the center node, turns right
-      vL = 235;
-      vR = 160;
+      vL = 255;
+      vR = 130;
       MotorWriting(vL, vR); 
-      delay(250);   //Needed to be modified.
+      delay(1000);   //Needed to be modified.
       isfromCenter = true;
     }
 
   }
   else if (black_count >= 1) {
     if(isStart){
-      isStart = f  alse;    //If the car drives out from the first node, turn isStart off.
+      isStart = false;    //If the car drives out from the first node, turn isStart off.
     }
-    error = -1 * IR_val[0] - 0.5 * IR_val[1] + 0.5 * IR_val[3] + 1 * IR_val[4];  //If IR sensor detect black, it returns 1. Else, it returns 0.
-    error = error * 50;
-    vL += error;
-    vR -= error;
+    error = -1 * IR_val[0] - 0.6 * IR_val[1] + 0.6 * IR_val[3] + 1 * IR_val[4];  //If IR sensor detect black, it returns 1. Else, it returns 0.
+    error = error * 50 / black_count;
+    vL = 200 + error;
+    vR = 200 - error;
     if(vL>250){
     vL = 250;
     }
@@ -85,10 +85,10 @@ void loop() {
   }
 
   
-  Serial.print("L: ");
-  Serial.println(vL);
-  Serial.print("R: ");
-  Serial.println(vR);
+  // Serial.print("L: ");
+  // Serial.println(vL);
+  // Serial.print("R: ");
+  // Serial.println(vR);
   // MotorWriting(vL, vR);
   delay(20);
 }

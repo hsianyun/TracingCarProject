@@ -7,8 +7,8 @@
 /***************************************************************************/
 
 /*===========================import variable===========================*/
-int extern IRpin_LL,IRpin_L,IRpin_M,IRpin_R,IRpin_RR;
-int extern _Tp;
+// int extern IRpin_LL,IRpin_L,IRpin_M,IRpin_R,IRpin_RR;
+// int extern _Tp;
 /*===========================import variable===========================*/
 
 // TODO: add some function to control your car when encounter a node
