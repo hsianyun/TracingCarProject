@@ -107,16 +107,44 @@ class Maze:
 
         return None
 
-    def getAction(self, car_dir, nd_from, nd_to):
+    def getAction(self, car_dir, nd_from:Node, nd_to:Node):
         # TODO : get the car action
-        # Tips : return an action and the next direction of the car if the nd_to is the Successor of nd_to
+        # Tips : return an action and the next direction of the car if the nd_from is the Successor of nd_to
 		# If not, print error message and return 0
-        return None
+        if not nd_to.isSuccessor(nd_from):
+            print(f"Node{nd_from.getIndex()} is not the Successor of the node{nd_to.getIndex()}")
+            print(nd_to.getSuccessors()[-1][0].getIndex())
+            return 0
+        
+        next_dir  = nd_from.getDirection(nd_to)
+        if next_dir == 0: return 0
 
-    def getActions(self, nodes):
+        if car_dir == next_dir: return 'f'
+        elif car_dir == 1:    #car facing north
+            if next_dir == 2: return 'b'
+            elif next_dir == 3: return 'l'
+            elif next_dir == 4: return 'r'
+        elif car_dir == 2:
+            if next_dir == 1: return 'b'
+            elif next_dir == 3: return 'r'
+            else: return 'l'
+        elif car_dir == 3:
+            if next_dir == 1: return 'r'
+            elif next_dir == 2: return 'l'
+            else: return 'b'
+        elif car_dir == 4:
+            if next_dir == 1: return 'l'
+            elif next_dir == 2: return 'r'
+            else: return 'b'
+        return 0
+
+    def getActions(self, nodes:list):
         # TODO : given a sequence of nodes, return the corresponding action sequence
         # Tips : iterate through the nodes and use getAction() in each iteration
-        return None
+        cmd_str = 'f'
+        for i in range(1,len(nodes)-1):
+            cmd_str += self.getAction(nodes[i].getSuccessors()[-1][1], nodes[i], nodes[i+1])
+        return cmd_str
 
     def actions_to_str(self, actions):
         # cmds should be a string sequence like "fbrl....", use it as the input of BFS checklist #1

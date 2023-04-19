@@ -15,9 +15,17 @@ class Direction(IntEnum):
 class Node:
     def __init__(self, index=0, Adjacency_nd=[0,0,0,0]):
         self.index = index
-        self.adjacency_nd = Adjacency_nd    #store the index of adjacency nodes in the sequence: North, South, West, East
+        self.adjacency_nd = list(Adjacency_nd)    #store the index of adjacency nodes in the sequence: North, South, West, East
         # store successor as (Node, direction to node, distance)
         self.Successors = []
+
+    def __hash__(self) -> int:
+        return self.index
+    
+    def __eq__(self, __value: object) -> bool:
+        if not isinstance(__value, Node):
+            return False
+        return self.index == __value.index
 
     def getIndex(self):
         return self.index
