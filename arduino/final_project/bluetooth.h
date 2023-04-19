@@ -10,7 +10,7 @@
 /*check out what you have learned from week 2*/
 
 enum BT_CMD {
-  NOTHING,
+  NOTHING, FORWARD, BACKWORD, LEFT, RIGHT
   // TODO: add your own command type here
 };
 
@@ -18,11 +18,15 @@ BT_CMD ask_BT(){
     BT_CMD message=NOTHING;
     char cmd;
     if(Serial1.available()){
-      cmd = char(Serial.read());
-      
-      // TODO:
-      // 1. get cmd from Serial1(bluetooth serial)
-      // 2. link bluetooth message to your own command type
+      if (char(Serial.read() == 'w'))
+        message = FORWARD;
+      else if (char(Serial.read() == 'a'))
+        message = LEFT;
+      else if (char(Serial.read() == 's'))
+        message = BACKWORD;
+      else if (char(Serial.read() == 'd'))
+        message = RIGHT;
+      cmd = Serial.read();
       #ifdef DEBUG
       Serial.print("cmd : ");
       Serial.println(cmd);
@@ -36,7 +40,12 @@ BT_CMD ask_BT(){
 // (but need to convert to byte type)
 void send_msg(const char& msg)
 {
-     // TODO:
+  int ScharLength = Serial.available();
+  if(Serial.available()){
+    for(int j=0; j<ScharLength; j++){
+      Serial1.write(Serial.read());
+    }
+  }
 }// send_msg
 
 // send UID back through Serial1(bluetooth serial)
