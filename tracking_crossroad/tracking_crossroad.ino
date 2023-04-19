@@ -55,9 +55,9 @@ void loop() {
       MotorWriting(vL, vR);
     }else{                //If the car is in the center node, turns right
       vL = 255;
-      vR = 160;
+      vR = 130;
       MotorWriting(vL, vR); 
-      delay(500);   //Needed to be modified.
+      delay(1000);   //Needed to be modified.
       isfromCenter = true;
     }
 
@@ -66,7 +66,7 @@ void loop() {
     if(isStart){
       isStart = false;    //If the car drives out from the first node, turn isStart off.
     }
-    error = -1 * IR_val[0] - 0.5 * IR_val[1] + 0.5 * IR_val[3] + 1 * IR_val[4];  //If IR sensor detect black, it returns 1. Else, it returns 0.
+    error = -1 * IR_val[0] - 0.6 * IR_val[1] + 0.6 * IR_val[3] + 1 * IR_val[4];  //If IR sensor detect black, it returns 1. Else, it returns 0.
     error = error * 50 / black_count;
     vL = 200 + error;
     vR = 200 - error;
