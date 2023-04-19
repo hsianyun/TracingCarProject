@@ -40,12 +40,7 @@ BT_CMD ask_BT(){
 // (but need to convert to byte type)
 void send_msg(const char& msg)
 {
-  int ScharLength = Serial.available();
-  if(Serial.available()){
-    for(int j=0; j<ScharLength; j++){
-      Serial1.write(Serial.read());
-    }
-  }
+  Serial1.write(msg);
 }// send_msg
 
 // send UID back through Serial1(bluetooth serial)

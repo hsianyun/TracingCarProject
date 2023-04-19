@@ -99,7 +99,9 @@ void SetState()
   // TODO:
   int direction = ask_BT();
   if (direction != 0) state = true;
-  
+  else  state = false;
+  tracking(digitalRead(IRpin_LL), digitalRead(IRpin_L), digitalRead(IRpin_M), digitalRead(IRpin_R), digitalRead(IRpin_RR));
+  delay(5);
   // 1. Get command from bluetooth 
   // 2. Change state if need
 }
