@@ -22,18 +22,18 @@
 // TB6612, 請按照自己車上的接線寫入腳位(左右不一定要跟註解寫的一樣)
 #define MotorR_I1      2 //定義 A1 接腳（右）
 #define MotorR_I2      3 //定義 A2 接腳（右）
-#define MotorR_PWMR    11//定義 ENA (PWM調速) 接腳
+#define MotorR_PWMR    44//定義 ENA (PWM調速) 接腳
 #define MotorL_I3      5 //定義 B1 接腳（左）
 #define MotorL_I4      6 //定義 B2 接腳（左）
-#define MotorL_PWML    12//定義 ENB (PWM調速) 接腳
+#define MotorL_PWML    45//定義 ENB (PWM調速) 接腳
 // 循線模組, 請按照自己車上的接線寫入腳位
-#define IRpin_LL 32
-#define IRpin_L  34
-#define IRpin_M  36
-#define IRpin_R  38
-#define IRpin_RR 40
+#define IRpin_LL 38
+#define IRpin_L  39
+#define IRpin_M  40
+#define IRpin_R  41
+#define IRpin_RR 42
 // RFID, 請按照自己車上的接線寫入腳位
-#define RST_PIN      49        // 讀卡機的重置腳位
+#define RST_PIN      9        // 讀卡機的重置腳位
 #define SS_PIN       53       // 晶片選擇腳位
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // 建立MFRC522物件
 /*===========================define pin & create module object===========================*/
@@ -96,6 +96,7 @@ void loop()
 
 void SetState()
 {
+  // TODO:
   int direction = ask_BT();
   if (direction != 0) state = true;
   
