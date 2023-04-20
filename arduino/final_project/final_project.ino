@@ -82,31 +82,57 @@ BT_CMD _cmd = NOTHING;        //enum for bluetooth message, reference in bluetoo
 /*===========================initialize variables===========================*/
 
 /*===========================declare function prototypes===========================*/
-void Search();// search graph
-void SetState();// switch the state
+void Search();    // search graph
+void SetState();  // switch the state
 /*===========================declare function prototypes===========================*/
 
 /*===========================define function===========================*/
 void loop()
 {
-   if(!state) MotorWriting(0,0);
-   else Search();
-   SetState();
+  if(!state) {
+    MotorWriting(0,0);
+    ask_BT();
+  }
+  else Search();
+  SetState();
 }
 
 void SetState()
 {
   // TODO:
-//  int direction = ask_BT();
-//  if (direction != 0) state = true;
-//  else  state = false;
-  state = true;
-  
-  int l2 = digitalRead(IRpin_LL), l1 = digitalRead(IRpin_L), m0 = digitalRead(IRpin_M), r1 = digitalRead(IRpin_R), r2 = digitalRead(IRpin_RR);
+  int l2 = digitalRead(IRpin_LL), l1 = digitalRead(IRpin_L), m0 = digitalRead(IRpin_M);
+  int r1 = digitalRead(IRpin_R), r2 = digitalRead(IRpin_RR);
 
-  
+  //十字循跡
+  bool inCenter = false;
+  state = true;
   tracking(l2, l1, m0, r1, r2);
-  if (in_the_node(l2, l1, m0, r1, r2))  right_turn();
+  if (in_the_node(l2, l1, m0, r1, r2) && !inCenter)  {
+    right_turn();
+    inCenter = !inCenter;
+  }
+
+  //一般控制
+  tracking(l2, l1, m0, r1, r2);
+  if (in_the_node(l2, l1, m0, r1, r2))  {
+    state = false;
+    int direction = ask_BT();
+    switch(direction) {
+      case 0:
+        state = false;  break;
+      case 1:
+        state = true; go_straight();  break;
+      case 2:
+        state = true; reverse_turn();  break;
+      case 3:
+        state = true; left_turn();  break;
+      case 4:
+        state = true; right_turn();  break;
+    }
+  }
+  else  {
+    state = true;
+  }
   // 1. Get command from bluetooth 
   // 2. Change state if need
 }

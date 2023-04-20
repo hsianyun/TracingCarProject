@@ -62,9 +62,9 @@ void tracking(int l2, int l1, int m0, int r1, int r2){
     
   // TODO: complete your P/PID tracking code
   if(_Kp>0){
-    error /= _Kp;
-    vR -= error;
-    vL += error;
+    error *= 50;
+    vR += error;
+    vL -= error;
   }else{
     vL = 200;
     vR = 0;
