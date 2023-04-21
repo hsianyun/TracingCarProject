@@ -4,7 +4,8 @@ import BT
 object = BTinterface()
 object.start()
 while(True):
-    if (object.ser.SerialReadString()):
-        print('read string', object.ser.SerialReadString())
-    if(object.ser.SerialReadByte()):
-        print('rfid', object.ser.SerialReadByte())
+    # if (object.ser.SerialReadString()):
+    #     print('read string', object.ser.SerialReadString())
+    uid = object.get_UID()
+    if(uid):
+        print('rfid', uid)

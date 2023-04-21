@@ -10,7 +10,7 @@
 /*check out what you have learned from week 2*/
 
 enum BT_CMD {
-  NOTHING, FORWARD, BACKWORD, LEFT, RIGHT
+  NOTHING, FORWARD, BACKWORD, LEFT, RIGHT, START
   // TODO: add your own command type here
 };
 
@@ -18,18 +18,22 @@ BT_CMD ask_BT(){
     BT_CMD message=NOTHING;
     char cmd;
     if(Serial3.available()){
-      if (Serial3.read() == 'w')
+      cmd = char(Serial3.read());
+      if (cmd == 'f')
         message = FORWARD;
-      else if (Serial3.read() == 'a')
+      else if (cmd == 'l')
         message = LEFT;
-      else if (Serial3.read() == 's')
+      else if (cmd == 'b')
         message = BACKWORD;
-      else if (Serial3.read() == 'd')
+      else if (cmd == 'r')
         message = RIGHT;
-      cmd = Serial3.read();
+      else if (cmd == 's')
+        message = START;
+      
       #ifdef DEBUG
       Serial.print("cmd : ");
       Serial.println(cmd);
+      Serial.println(message);
       #endif
     }
     return message;

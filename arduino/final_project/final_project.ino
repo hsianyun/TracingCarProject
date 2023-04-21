@@ -6,12 +6,12 @@
 // Modify     [2020/03/27 Erik Kuo]
 /***************************************************************************/
 
-#define DEBUG // debug flag
+#define DEBUG// debug flag
 
 // for RFID
 #include <SPI.h>
 #include <MFRC522.h>
-
+#include "bluetooth.h"
 /*===========================define pin & create module object================================*/
 // BlueTooth
 // BT connect to Serial1 (Hardware Serial)
@@ -37,7 +37,7 @@
 #define SS_PIN       53       // 晶片選擇腳位
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // 建立MFRC522物件
 /*===========================define pin & create module object===========================*/
-
+bool start = false;
 /*============setup============*/
 void setup()
 {
@@ -61,16 +61,22 @@ void setup()
    pinMode(IRpin_M, INPUT);
    pinMode(IRpin_R, INPUT);
    pinMode(IRpin_RR, INPUT);
-#ifdef DEBUG
+
+  BT_CMD bt_cmd;
+  while(!start){
+    bt_cmd = ask_BT();
+    if(bt_cmd == 5)
+      start = true;
+  }
+  #ifdef DEBUG
   Serial.println("Start!");
-#endif
+  #endif
 }
 /*============setup============*/
 
 /*=====Import header files=====*/
 #include "RFID.h"
 #include "track.h"
-#include "bluetooth.h"
 #include "node.h"
 /*=====Import header files=====*/
 

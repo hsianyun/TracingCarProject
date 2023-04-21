@@ -17,7 +17,7 @@ class BTinterface:
 
     def start(self):
         input("Press enter to start.")
-        self.ser.SerialWriteString('connected')
+        self.ser.SerialWriteString('s')
 
     def get_UID(self):
         return self.ser.SerialReadByte()
