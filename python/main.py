@@ -7,6 +7,23 @@ import pandas
 import time
 import sys
 import os
+import threading
+
+class RFIDthread(threading.Thread):
+    def __init__(self, point_obj:Scoreboard):
+        threading.Thread.__init__(self)
+        self.point = point_obj
+
+    def run(self):
+        try:
+            uid = BTinterface.get_UID()
+            if uid > 0:
+                print(f'Get UID: {uid}')
+                self.point.add_UID(uid)     #upload uid to scoreboard
+                print("score:", self.point.getCurrentScore())    
+        except:
+            pass
+
 
 def main():
     maze = mz.Maze("./python/data/small_maze.csv") 
@@ -22,6 +39,13 @@ def main():
     elif (sys.argv[1] == '1'):
         print("Mode 1: Self-testing mode.")
         # TODO: You can write your code to test specific function.
+        while True:
+            rfid = RFIDthread(point)
+            rfid.start()
+
+            
+            rfid.join()
+
 
 if __name__ == '__main__':
     main()

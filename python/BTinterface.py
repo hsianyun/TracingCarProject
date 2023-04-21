@@ -23,8 +23,17 @@ class BTinterface:
         return self.ser.SerialReadByte()
 
     def send_action(self,dirc):
-        
         # TODO : send the action to car
+        if dirc == 'f':
+            self.ser.SerialWriteString('f')
+        elif dirc == 'b':
+            self.ser.SerialWriteString('b')
+        elif dirc == 'r':
+            self.ser.SerialWriteString('r')
+        elif dirc == 'l':
+            self.ser.SerialWriteString('l')
+        else:
+            print('No such command')
         return
 
     def end_process(self):

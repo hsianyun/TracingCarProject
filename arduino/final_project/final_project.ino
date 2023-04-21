@@ -62,6 +62,10 @@ void setup()
    pinMode(IRpin_R, INPUT);
    pinMode(IRpin_RR, INPUT);
 
+  #ifdef DEBUG
+  Serial.println("Waiting for bluetooth!");
+  #endif
+
   BT_CMD bt_cmd;
   while(!start){
     bt_cmd = ask_BT();
@@ -85,6 +89,7 @@ int l2=0,l1=0,m0=0,r1=0,r2=0; //紅外線模組的讀值(0->white,1->black)
 int _Tp=90;                   //set your own value for motor power
 bool state=false;             //set state to false to halt the car, set state to true to activate the car
 BT_CMD _cmd = NOTHING;        //enum for bluetooth message, reference in bluetooth.h line 2
+bool send = false;            //if arduino ask python server
 /*===========================initialize variables===========================*/
 
 /*===========================declare function prototypes===========================*/
@@ -95,9 +100,9 @@ void SetState();  // switch the state
 /*===========================define function===========================*/
 void loop()
 {
-  if(!state) {
-    MotorWriting(0,0);
-    ask_BT();
+  if(!state) {    //In the node and hasn't received bluetooth signal
+    MotorWriting(0,0);  //stop and wait for command
+    // ask_BT();
   }
   else Search();
   SetState();
@@ -119,24 +124,34 @@ void SetState()
   }
 
   //一般控制
-  tracking(l2, l1, m0, r1, r2);
+  
   if (in_the_node(l2, l1, m0, r1, r2))  {
+    /*
+      when the car is in node, send 'n' to python and wait until received cmd
+      then when it move out of the node, send 'o' to python
+      */
     state = false;
-    int direction = ask_BT();
+    if(!send){
+      send_msg('n');    //ask the server where to go
+      send = true;
+    }
+    int direction = ask_BT(); //if we didn't received anything, direction == 0
     switch(direction) {
       case 0:
         state = false;  break;
       case 1:
-        state = true; go_straight();  break;
+        state = true; go_straight(); send = false; send_msg('o'); break;
       case 2:
-        state = true; reverse_turn();  break;
+        state = true; reverse_turn(); send = false; send_msg('o'); break;
       case 3:
-        state = true; left_turn();  break;
+        state = true; left_turn(); send = false; send_msg('o'); break;
       case 4:
-        state = true; right_turn();  break;
+        state = true; right_turn(); send = false; send_msg('o'); break;
+      
     }
   }
   else  {
+    tracking(l2, l1, m0, r1, r2);
     state = true;
   }
   // 1. Get command from bluetooth 
