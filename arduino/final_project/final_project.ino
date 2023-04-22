@@ -6,7 +6,8 @@
 // Modify     [2020/03/27 Erik Kuo]
 /***************************************************************************/
 
-#define DEBUG// debug flag
+#define DEBUG
+// debug flag
 
 // for RFID
 #include <SPI.h>
@@ -87,73 +88,83 @@ void setup()
 /*===========================initialize variables===========================*/
 int l2=0,l1=0,m0=0,r1=0,r2=0; //紅外線模組的讀值(0->white,1->black)
 int _Tp=90;                   //set your own value for motor power
-bool state=false;             //set state to false to halt the car, set state to true to activate the car
+int state=0;             //set state to false to halt the car, set state to true to activate the car
 BT_CMD _cmd = NOTHING;        //enum for bluetooth message, reference in bluetooth.h line 2
 bool send = false;            //if arduino ask python server
+int inCenter = 0;
 /*===========================initialize variables===========================*/
 
 /*===========================declare function prototypes===========================*/
 void Search();    // search graph
-void SetState();  // switch the state
+void SetState(int *state, int *inCenter);  // switch the state
 /*===========================declare function prototypes===========================*/
 
 /*===========================define function===========================*/
 void loop()
 {
-  if(!state) {    //In the node and hasn't received bluetooth signal
+  // Serial.println(state);
+  if(state == 0) {    //In the node and hasn't received bluetooth signal
     MotorWriting(0,0);  //stop and wait for command
     // ask_BT();
   }
   else Search();
-  SetState();
+  SetState(&state, &inCenter);
 }
 
-void SetState()
+void SetState(int *state, int *inCenter)
 {
   // TODO:
   int l2 = digitalRead(IRpin_LL), l1 = digitalRead(IRpin_L), m0 = digitalRead(IRpin_M);
   int r1 = digitalRead(IRpin_R), r2 = digitalRead(IRpin_RR);
 
   //十字循跡
-  bool inCenter = false;
-  state = true;
-  tracking(l2, l1, m0, r1, r2);
-  if (in_the_node(l2, l1, m0, r1, r2) && !inCenter)  {
-    right_turn();
-    inCenter = !inCenter;
-  }
-
-  //一般控制
+  *state = 1;
   
   if (in_the_node(l2, l1, m0, r1, r2))  {
-    /*
-      when the car is in node, send 'n' to python and wait until received cmd
-      then when it move out of the node, send 'o' to python
-      */
-    state = false;
-    if(!send){
-      send_msg('n');    //ask the server where to go
-      send = true;
-    }
-    int direction = ask_BT(); //if we didn't received anything, direction == 0
-    switch(direction) {
-      case 0:
-        state = false;  break;
-      case 1:
-        state = true; go_straight(); send = false; send_msg('o'); break;
-      case 2:
-        state = true; reverse_turn(); send = false; send_msg('o'); break;
-      case 3:
-        state = true; left_turn(); send = false; send_msg('o'); break;
-      case 4:
-        state = true; right_turn(); send = false; send_msg('o'); break;
-      
+    if(*inCenter == 0){
+      right_turn();
+      *inCenter = 1;
+    }else{
+      reverse_turn();
+      *inCenter = 0;
     }
   }
-  else  {
+  else{
     tracking(l2, l1, m0, r1, r2);
-    state = true;
+
   }
+  
+  //一般控制
+  
+  // if (in_the_node(l2, l1, m0, r1, r2))  {
+  //   /*
+  //     when the car is in node, send 'n' to python and wait until received cmd
+  //     then when it move out of the node, send 'o' to python
+  //     */
+  //   state = false;
+  //   if(!send){
+  //     send_msg('n');    //ask the server where to go
+  //     send = true;
+  //   }
+  //   int direction = ask_BT(); //if we didn't received anything, direction == 0
+  //   switch(direction) {
+  //     case 0:
+  //       state = false;  break;
+  //     case 1:
+  //       state = true; go_straight(); send = false; send_msg('o'); break;
+  //     case 2:
+  //       state = true; reverse_turn(); send = false; send_msg('o'); break;
+  //     case 3:
+  //       state = true; left_turn(); send = false; send_msg('o'); break;
+  //     case 4:
+  //       state = true; right_turn(); send = false; send_msg('o'); break;
+      
+  //   }
+  // }
+  // else  {
+  //   tracking(l2, l1, m0, r1, r2);
+  //   state = true;
+  // }
   // 1. Get command from bluetooth 
   // 2. Change state if need
 }
