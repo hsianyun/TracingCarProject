@@ -73,6 +73,23 @@ void setup()
   for (int i = 0 ;i < 100; i++)
     path[i] = '\0';
 
+  send_msg("path");
+  
+  bool read_path = false;
+
+  while(!read_path){
+    int str_len = Serial3.available();
+    if(str_len > 0){
+      delay(100);
+      path = read_msg();
+      read_path = true;      
+    }
+  }
+  #ifdef DEBUG
+  send_msg("Path received! The command is:");
+  send_msg(path);
+  #endif
+
   BT_CMD bt_start;
   while(!start){
     bt_start = ask_BT();
@@ -156,7 +173,7 @@ void SetState(int *state, int *inCenter, int *send)
 
   }
 
-  /*
+  
   //一般控制
   if (in_the_node(l2, l1, m0, r1, r2))  {
     
@@ -177,20 +194,20 @@ void SetState(int *state, int *inCenter, int *send)
       case 0:
         *state = 0;  break;
       case 1:
-        *state = 1; go_straight(); send = false; send_msg('o'); break;
+        *state = 1; go_straight();  break;
       case 2:
-        *state = 1; reverse_turn(); send = false; send_msg('o'); break;
+        *state = 1; reverse_turn(); break;
       case 3:
-        *state = 1; left_turn(); send = false; send_msg('o'); break;
+        *state = 1; left_turn(); break;
       case 4:
-        *state = 1; right_turn(); send = false; send_msg('o'); break;
+        *state = 1; right_turn(); break;
     }
   }
   else  {
     tracking(l2, l1, m0, r1, r2);
     *state = 1;
  }
- */
+ 
  
  // 1. Get command from bluetooth 
  // 2. Change state if need

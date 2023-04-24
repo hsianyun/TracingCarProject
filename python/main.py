@@ -31,7 +31,7 @@ def main():
     # point = ScoreboardFake("your team name", "data/fakeUID.csv")
     interf = BTinterface()
     # TODO : Initialize necessary variables
-    while(interf.ser.SerialReadString() != 'p'):
+    while(interf.ser.SerialReadString() != 'path'):
         pass
     bfs_list = maze.BFS_2(3,48)
     cmd_str = maze.getActions(bfs_list)
