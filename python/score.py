@@ -88,9 +88,9 @@ class Scoreboard:
 
         # GET INFORMATION FROM SERVER
         print("Game is starting.....")
-        self.socket.start_game({ 
-                'gamemode': self.game, 
-                'team': self.team })
+        # self.socket.start_game({ 
+        #         'gamemode': self.game, 
+        #         'team': self.team })
 
     def add_UID(self, UID_str):
         '''Send {UID_str} to server to update score. Returns nothing.'''
