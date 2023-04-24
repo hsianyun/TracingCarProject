@@ -10,7 +10,7 @@
 /*check out what you have learned from week 2*/
 
 enum BT_CMD {
-  NOTHING, FORWARD, BACKWORD, LEFT, RIGHT, START
+  NOTHING, FORWARD, BACKWORD, LEFT, RIGHT, START, PATH
   // TODO: add your own command type here
 };
 
@@ -29,6 +29,8 @@ BT_CMD ask_BT(){
         message = RIGHT;
       else if (cmd == 's')
         message = START;
+      else if (cmd == 'p')
+        message = PATH;
       
       #ifdef DEBUG
       Serial.print("cmd : ");
@@ -47,8 +49,21 @@ void send_msg(const char* msg)
   int len = strlen(msg);
   for (int i = 0 ; i < len; i++)  {
     Serial3.write(msg[i]);
- }
+  }
 }// send_msg
+
+char* read_msg() {
+  char* msg = new char[100];
+  for (int i = 0; i < 100; i++)
+    msg[i] = '\0';
+  if (Serial3.available())  {
+    int charLength = Serial3.available();
+    for(int i=0; i<charLength; i++){
+      msg[i] = Serial3.read();
+    }
+  }
+  return *msg;
+}
 
 // send UID back through Serial3(bluetooth serial)
 void send_byte(byte *id, byte& idSize) {

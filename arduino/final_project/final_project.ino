@@ -13,6 +13,7 @@
 #include <SPI.h>
 #include <MFRC522.h>
 #include "bluetooth.h"
+#include "string.h"
 /*===========================define pin & create module object================================*/
 // BlueTooth
 // BT connect to Serial1 (Hardware Serial)
@@ -39,6 +40,8 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // 建立MFRC522物件
 /*===========================define pin & create module object===========================*/
 bool start = false;
+bool receive_path = false;
+char* path = new char [100];
 /*============setup============*/
 void setup()
 {
@@ -67,15 +70,30 @@ void setup()
   Serial.println("Waiting for bluetooth!");
   #endif
 
-  BT_CMD bt_cmd;
+  for (int i = 0 ;i < 100; i++)
+    path[i] = '\0';
+
+  BT_CMD bt_start;
   while(!start){
-    bt_cmd = ask_BT();
-    if(bt_cmd == 5)
+    bt_start = ask_BT();
+    if(bt_start == 5)
       start = true;
   }
   #ifdef DEBUG
   Serial.println("Start!");
   #endif
+
+  send_msg('p');
+
+  BT_CMD bt_path;
+  while(!receive_path) {
+    if(bt_path == 6)  {
+      receive_path = true;
+      send_msg("Receive instruction.");
+      delay(250);
+    }
+  }
+  path = read_msg();
 }
 /*============setup============*/
 
@@ -88,7 +106,7 @@ void setup()
 /*===========================initialize variables===========================*/
 int l2=0,l1=0,m0=0,r1=0,r2=0; //紅外線模組的讀值(0->white,1->black)
 int _Tp=90;                   //set your own value for motor power
-int state=0;             //set state to false to halt the car, set state to true to activate the car
+int state=0;                  //set state to false to halt the car, set state to true to activate the car
 BT_CMD _cmd = NOTHING;        //enum for bluetooth message, reference in bluetooth.h line 2
 int send = 0;            //if arduino ask python server
 int inCenter = 0;
@@ -105,7 +123,6 @@ void loop()
   // Serial.println(state);
   if(state == 0) {    //In the node and hasn't received bluetooth signal
     MotorWriting(0,0);  //stop and wait for command
-    // ask_BT();
   }
   else Search();
   SetState(&state, &inCenter, &send);
@@ -133,38 +150,39 @@ void SetState(int *state, int *inCenter, int *send)
     tracking(l2, l1, m0, r1, r2);
 
   }
-  
+
+  /*
   //一般控制
   
-  if (in_the_node(l2, l1, m0, r1, r2))  {
-    /*
-      when the car is in node, send 'n' to python and wait until received cmd
-      then when it move out of the node, send 'o' to python
-      */
-    *state = false;
-    if(*send == 0){
-      send_msg('n');    //ask the server where to go
-      *send = 1;
-    }
-    int direction = ask_BT(); //if we didn't received anything, direction == 0
-    switch(direction) {
-      case 0:
-        state = false;  break;
-      case 1:
-        state = true; go_straight(); *send = 0; send_msg('o'); break;
-      case 2:
-        state = true; reverse_turn(); *send = 0; send_msg('o'); break;
-      case 3:
-        state = true; left_turn(); *send = 0; send_msg('o'); break;
-      case 4:
-        state = true; right_turn(); *send = 0; send_msg('o'); break;
+  // if (in_the_node(l2, l1, m0, r1, r2))  {
+  //   /*
+  //     when the car is in node, send 'n' to python and wait until received cmd
+  //     then when it move out of the node, send 'o' to python
+  //     */
+  //   state = false;
+  //   if(!send){
+  //     send_msg('n');    //ask the server where to go
+  //     send = true;
+  //   }
+  //   int direction = ask_BT(); //if we didn't received anything, direction == 0
+  //   switch(direction) {
+  //     case 0:
+  //       state = false;  break;
+  //     case 1:
+  //       state = true; go_straight(); send = false; send_msg('o'); break;
+  //     case 2:
+  //       state = true; reverse_turn(); send = false; send_msg('o'); break;
+  //     case 3:
+  //       state = true; left_turn(); send = false; send_msg('o'); break;
+  //     case 4:
+  //       state = true; right_turn(); send = false; send_msg('o'); break;
       
-    }
-  }
-  else  {
-    tracking(l2, l1, m0, r1, r2);
-    state = true;
-  }
+  //   }
+  // }
+  // else  {
+  //   tracking(l2, l1, m0, r1, r2);
+  //   state = true;
+  // }
   // 1. Get command from bluetooth 
   // 2. Change state if need
 }
@@ -172,8 +190,9 @@ void SetState(int *state, int *inCenter, int *send)
 void Search()
 {
   byte *idSize = new byte[4];
-  if (rfid(*idSize) != 0) {
-    send_byte(rfid(*idSize), *idSize);
+  byte uid = rfid(*idSize);
+  if (uid != 0) {
+    send_byte(uid, *idSize);
   }
   // TODO: let your car search graph(maze) according to bluetooth command from computer(python code)
 }

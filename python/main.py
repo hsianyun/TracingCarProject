@@ -27,7 +27,7 @@ class RFIDthread(threading.Thread):
 
 def main():
     maze = mz.Maze("./python/data/small_maze.csv") 
-    point = Scoreboard("Team Eric, Sam, and Dhgf", "ask TA for ip")
+    point = Scoreboard("Never gonna give you up", "ask TA for ip")
     # point = ScoreboardFake("your team name", "data/fakeUID.csv")
     interf = BTinterface()
     # TODO : Initialize necessary variables
