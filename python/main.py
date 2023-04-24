@@ -36,8 +36,14 @@ def main():
     bfs_list = maze.BFS_2(3,48)
     cmd_str = maze.getActions(bfs_list)
 
-    interf.start()
     interf.ser.SerialWriteString(cmd_str)
+    
+    interf.start()
+    point.socket.start_game({ 
+                'gamemode': point.game, 
+                'team': point.team })
+
+    
     if (sys.argv[1] == '0'):
         print("Mode 0: for treasure-hunting")
         # TODO : for treasure-hunting, which encourages you to hunt as many scores as possible
