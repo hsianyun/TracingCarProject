@@ -56,8 +56,8 @@ class Maze:
             for nd in adjacency_nd:
                 try:
                     nd = int(nd)
-                    if (not cur.isSuccessor(self.nd_dict[nd])) and len(self.nd_dict[nd].getSuccessors()) == 0:
-                        self.nd_dict[nd].copySuccessors(cur)
+                    if not cur.isSuccessor(self.nd_dict[nd]):
+                        # self.nd_dict[nd].copySuccessors(cur)
                         self.nd_dict[nd].setSuccessor(cur, Direction(adjacency_nd.index(nd)+1), cur.getSuccessors()[-1][-1] +1)
                         bfs_queue.append(self.nd_dict[nd])
                         search_count += 1
@@ -65,7 +65,13 @@ class Maze:
                     pass
 
             if search_count == 0:   #find deadend
-                node_sequence = [successor[0] for successor in cur.Successors[1:]] + [cur]
+                node_sequence = [cur]
+                while True:
+                    if cur == start_node:
+                        break
+                    last_nd = cur.getSuccessors()[-1][0]
+                    node_sequence = [last_nd] + node_sequence
+                    cur = last_nd
                 return node_sequence
 
             
@@ -91,15 +97,21 @@ class Maze:
             cur = bfs_queue.pop(0)
 
             if cur == end_node:
-                node_sequence = [successor[0] for successor in cur.Successors[1:]] + [cur]
+                node_sequence = [cur]
+                while True:
+                    if cur == start_node:
+                        break
+                    last_nd = cur.getSuccessors()[-1][0]
+                    node_sequence = [last_nd] + node_sequence
+                    cur = last_nd
                 return node_sequence
             
             adjacency_nd = list(cur.getAdjacency())
             for nd in adjacency_nd:
                 try:
                     nd = int(nd)
-                    if (not cur.isSuccessor(self.nd_dict[nd])) and len(self.nd_dict[nd].getSuccessors()) == 0:
-                        self.nd_dict[nd].copySuccessors(cur)
+                    if not cur.isSuccessor(self.nd_dict[nd]):
+                        # self.nd_dict[nd].copySuccessors(cur)
                         self.nd_dict[nd].setSuccessor(cur, Direction(adjacency_nd.index(nd)+1), cur.getSuccessors()[-1][-1] +1)
                         bfs_queue.append(self.nd_dict[nd])
                 except:

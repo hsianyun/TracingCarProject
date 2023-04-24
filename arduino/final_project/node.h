@@ -20,9 +20,6 @@ bool in_the_node(int l2, int l1, int m0, int r1, int r2)  {
   bool in_node_or_not = false;
   if (blackCount >= 4)  {
     in_node_or_not = true;
-
-//  非十字循跡時執行
-//  send_msg("I am in the node, what should I do?");
   }
   return in_node_or_not;
 }
