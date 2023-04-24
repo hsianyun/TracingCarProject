@@ -31,10 +31,19 @@ def main():
     # point = ScoreboardFake("your team name", "data/fakeUID.csv")
     interf = BTinterface()
     # TODO : Initialize necessary variables
+    while(interf.ser.SerialReadString() != 'p'):
+        pass
+    bfs_list = maze.BFS_2(3,48)
+    cmd_str = maze.getActions(bfs_list)
+
+        
     interf.start()
+
     if (sys.argv[1] == '0'):
         print("Mode 0: for treasure-hunting")
         # TODO : for treasure-hunting, which encourages you to hunt as many scores as possible
+        
+
         
     elif (sys.argv[1] == '1'):
         print("Mode 1: Self-testing mode.")
