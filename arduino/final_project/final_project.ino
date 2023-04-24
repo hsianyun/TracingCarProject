@@ -69,9 +69,26 @@ void setup()
   #ifdef DEBUG
   Serial.println("Waiting for bluetooth!");
   #endif
-
+  
   for (int i = 0 ;i < 100; i++)
     path[i] = '\0';
+
+  send_msg("path");
+  
+  bool read_path = false;
+
+  while(!read_path){
+    int str_len = Serial3.available();
+    if(str_len > 0){
+      delay(100);
+      path = read_msg();
+      read_path = true;      
+    }
+  }
+  #ifdef DEBUG
+  send_msg("Path received! The command is:");
+  send_msg(path);
+  #endif
 
   BT_CMD bt_start;
   while(!start){
@@ -83,17 +100,7 @@ void setup()
   Serial.println("Start!");
   #endif
 
-  send_msg("path");
-
-  BT_CMD bt_path;
-  while(!receive_path) {
-    if(bt_path == 6)  {
-      receive_path = true;
-      send_msg("Receive instruction.");
-      delay(250);
-    }
-  }
-  path = read_msg();
+  send_msg("path"); 
 }
 /*============setup============*/
 
@@ -108,8 +115,7 @@ int l2=0,l1=0,m0=0,r1=0,r2=0; //紅外線模組的讀值(0->white,1->black)
 int _Tp=90;                   //set your own value for motor power
 int state=0;                  //set state to false to halt the car, set state to true to activate the car
 BT_CMD _cmd = NOTHING;        //enum for bluetooth message, reference in bluetooth.h line 2
-bool send = false;            //if arduino ask python server
-int inCenter = 0;
+int inCenter = 0, step_num = 0;
 /*===========================initialize variables===========================*/
 
 /*===========================declare function prototypes===========================*/
@@ -121,16 +127,16 @@ void SetState(int *state, int *inCenter);  // switch the state
 void loop()
 {
   // Serial.println(state);
-  if(state == 0) {    //In the node and hasn't received bluetooth signal
+  if(state == 0) {      //In the node and hasn't received bluetooth signal
     MotorWriting(0,0);  //stop and wait for command
   }
   else Search();
+  Search();
   SetState(&state, &inCenter);
 }
 
 void SetState(int *state, int *inCenter)
 {
-  // TODO:
   int l2 = digitalRead(IRpin_LL), l1 = digitalRead(IRpin_L), m0 = digitalRead(IRpin_M);
   int r1 = digitalRead(IRpin_R), r2 = digitalRead(IRpin_RR);
 
@@ -148,56 +154,56 @@ void SetState(int *state, int *inCenter)
   }
   else{
     tracking(l2, l1, m0, r1, r2);
-
   }
+}
 
-  /*
+void SetState(int *state) {
+  
+  int l2 = digitalRead(IRpin_LL), l1 = digitalRead(IRpin_L), m0 = digitalRead(IRpin_M);
+  int r1 = digitalRead(IRpin_R), r2 = digitalRead(IRpin_RR);
+  
   //一般控制
   if (in_the_node(l2, l1, m0, r1, r2))  {
-    
+    /*
       when the car is in node, send 'n' to python and wait until received cmd
       then when it move out of the node, send 'o' to python
-    
+    */
     *state = 0;
-    if(!send){
-      send_msg('n');    //ask the server where to go
-      send = true;
-    }
 
-    int i = 0;
-    int direction = int(path[i])-48;
-    i += 1;
-//    int direction = ask_BT(); //if we didn't received anything, direction == 0
+    int direction = int(path[step_num])-48;
+    step_num += 1;
     switch(direction) {
       case 0:
         *state = 0;  break;
       case 1:
-        *state = 1; go_straight(); send = false; send_msg('o'); break;
+        *state = 1; go_straight();  break;
       case 2:
-        *state = 1; reverse_turn(); send = false; send_msg('o'); break;
+        *state = 1; reverse_turn(); break;
       case 3:
-        *state = 1; left_turn(); send = false; send_msg('o'); break;
+        *state = 1; left_turn(); break;
       case 4:
-        *state = 1; right_turn(); send = false; send_msg('o'); break;
+        *state = 1; right_turn(); break;
     }
   }
   else  {
     tracking(l2, l1, m0, r1, r2);
     *state = 1;
- }
- */
- 
- // 1. Get command from bluetooth 
- // 2. Change state if need
+  }
+  
+  // 1. Get command from bluetooth 
+  // 2. Change state if need
 }
 
 void Search()
 {
   byte *idSize = new byte[4];
   byte *uid = rfid(*idSize);
+  #ifdef DEBUG
+//Serial.println(uid);
+  #endif  
   if (uid != 0) {
     send_byte(uid, *idSize);
   }
-  // TODO: let your car search graph(maze) according to bluetooth command from computer(python code)
+  //let your car search graph(maze) according to bluetooth command from computer(python code)
 }
 /*===========================define function===========================*/
