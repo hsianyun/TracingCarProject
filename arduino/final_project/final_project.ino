@@ -157,6 +157,44 @@ void SetState(int *state, int *inCenter, int *send)
 
   /*
   //一般控制
+<<<<<<< HEAD
+  if (in_the_node(l2, l1, m0, r1, r2))  {
+    
+      when the car is in node, send 'n' to python and wait until received cmd
+      then when it move out of the node, send 'o' to python
+    
+    *state = 0;
+    if(!send){
+      send_msg('n');    //ask the server where to go
+      send = true;
+    }
+
+    int i = 0;
+    int direction = int(path[i])-48;
+    i += 1;
+//    int direction = ask_BT(); //if we didn't received anything, direction == 0
+    switch(direction) {
+      case 0:
+        *state = 0;  break;
+      case 1:
+        *state = 1; go_straight(); send = false; send_msg('o'); break;
+      case 2:
+        *state = 1; reverse_turn(); send = false; send_msg('o'); break;
+      case 3:
+        *state = 1; left_turn(); send = false; send_msg('o'); break;
+      case 4:
+        *state = 1; right_turn(); send = false; send_msg('o'); break;
+    }
+  }
+  else  {
+    tracking(l2, l1, m0, r1, r2);
+    *state = 1;
+ }
+ */
+ 
+ // 1. Get command from bluetooth 
+ // 2. Change state if need
+=======
   
   // if (in_the_node(l2, l1, m0, r1, r2))  {
   //   /*
@@ -189,6 +227,7 @@ void SetState(int *state, int *inCenter, int *send)
   // }
   // 1. Get command from bluetooth 
   // 2. Change state if need
+>>>>>>> b9c8b564ab14d4583f5caeeea4abae0462841f88
 }
 
 void Search()
