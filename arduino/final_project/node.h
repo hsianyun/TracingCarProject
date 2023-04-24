@@ -28,14 +28,14 @@ bool in_the_node(int l2, int l1, int m0, int r1, int r2)  {
 }
 
 void left_turn()  {
-  vL = 130;
+  vL = 115;
   vR = 255;
   MotorWriting(vL, vR);
   delay(1000);   //Needed to be modified.
 }
 void right_turn() {
   vL = 255;
-  vR = 130;
+  vR = 115;
   MotorWriting(vL, vR);
   delay(1000);   //Needed to be modified.
 }

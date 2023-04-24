@@ -40,11 +40,11 @@ def main():
         print("Mode 1: Self-testing mode.")
         # TODO: You can write your code to test specific function.
         while True:
-            rfid = RFIDthread(point)
-            rfid.start()
-
-            
-            rfid.join()
+            uid = BTinterface.get_UID()
+            if uid:
+                print(f'Get UID: {uid}')
+                point.add_UID(uid)     #upload uid to scoreboard
+                print("score:", point.getCurrentScore())  
 
 
 if __name__ == '__main__':
