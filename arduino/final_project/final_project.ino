@@ -163,8 +163,11 @@ void SetState(int *state, int *inCenter)
       send_msg('n');    //ask the server where to go
       send = true;
     }
-    
-    int direction = ask_BT(); //if we didn't received anything, direction == 0
+
+    int i = 0;
+    int direction = int(path[i])-48;
+    i += 1;
+//    int direction = ask_BT(); //if we didn't received anything, direction == 0
     switch(direction) {
       case 0:
         *state = 0;  break;
