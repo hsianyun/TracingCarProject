@@ -83,7 +83,7 @@ void setup()
   Serial.println("Start!");
   #endif
 
-  send_msg('p');
+  send_msg("path");
 
   BT_CMD bt_path;
   while(!receive_path) {
