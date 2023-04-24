@@ -69,7 +69,7 @@ void setup()
   #ifdef DEBUG
   Serial.println("Waiting for bluetooth!");
   #endif
-
+  
   for (int i = 0 ;i < 100; i++)
     path[i] = '\0';
 
@@ -83,10 +83,11 @@ void setup()
   Serial.println("Start!");
   #endif
 
-  // send_msg("path");
-  #ifdef DEBUG
-  Serial.println("Start2");
-  #endif
+  // // send_msg("path");
+  // #ifdef DEBUG
+  // Serial.println("Start2");
+  // #endif
+
   // BT_CMD bt_path;
   // while(!receive_path) {
   //   if(bt_path == 6)  {
