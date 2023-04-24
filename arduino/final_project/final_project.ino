@@ -83,17 +83,20 @@ void setup()
   Serial.println("Start!");
   #endif
 
-  send_msg('p');
-
-  BT_CMD bt_path;
-  while(!receive_path) {
-    if(bt_path == 6)  {
-      receive_path = true;
-      send_msg("Receive instruction.");
-      delay(250);
-    }
-  }
-  path = read_msg();
+  // send_msg("path");
+  #ifdef DEBUG
+  Serial.println("Start2");
+  #endif
+  // BT_CMD bt_path;
+  // while(!receive_path) {
+  //   if(bt_path == 6)  {
+  //     receive_path = true;
+  //     send_msg("Receive instruction.");
+  //     delay(250);
+  //   }
+  // }
+  // path = read_msg();
+  
 }
 /*============setup============*/
 
@@ -125,6 +128,7 @@ void loop()
     MotorWriting(0,0);  //stop and wait for command
   }
   else Search();
+  // Search();
   SetState(&state, &inCenter, &send);
 }
 
@@ -191,6 +195,9 @@ void Search()
 {
   byte *idSize = new byte[4];
   byte uid = rfid(*idSize);
+  #ifdef DEBUG
+  Serial.println(uid);
+  #endif  
   if (uid != 0) {
     send_byte(uid, *idSize);
   }
