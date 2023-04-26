@@ -6,7 +6,7 @@
 // Modify     [2020/03/27 Erik Kuo]
 /***************************************************************************/
 
-#define DEBUG 1
+#define DEBUG
 // debug flag
 
 // for RFID
