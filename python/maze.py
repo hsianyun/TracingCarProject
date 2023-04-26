@@ -174,6 +174,19 @@ class Maze:
         print(cmds)
         return cmds
     
+    def strategy(self, start_nd, went:list, node_walk:list):
+        if len(went) != len(self.deadends):
+            dist = 100
+            next_nd = 0
+            for i in self.getDeadend():
+                if i not in went:
+                    if len(self.BFS(start_nd, i)) < dist and start_nd.getpoint < i.countpoint:
+                        next_nd = i #index of node
+            went += [next_nd]
+            node_walk += [next_nd]
+            return(self.strategy(next_nd, went:list, node_walk))
+        else:
+            return node_walk
     def initNodes(self):
         for node in self.nodes:
             node.initSuccessors()
