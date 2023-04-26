@@ -134,8 +134,7 @@ void loop()
     MotorWriting(0,0);  //stop and wait for command
   }
   else Search();
-  Search();
-  SetState(&state, &inCenter);
+  SetState(&state);
 }
 
 void SetState(int *state, int *inCenter)
@@ -171,7 +170,7 @@ void SetState(int *state) {
       when the car is in node, send 'n' to python and wait until received cmd
       then when it move out of the node, send 'o' to python
     */
-    *state = 0;
+    // *state = 0;
 
     int direction = int(path[step_num])-48;
     step_num += 1;

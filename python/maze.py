@@ -23,8 +23,13 @@ class Maze:
         self.raw_data = pd.read_csv(filepath).values    #generate lists
         self.nodes = [Node(int(raw_node[0]), raw_node[1:5]) for raw_node in self.raw_data]
         self.nd_dict = dict()  # key: index, value: the correspond node
+        self.deadends = list()
         for node in self.nodes:
-            self.nd_dict[node.getIndex()] = node
+            index = node.getIndex()
+            self.nd_dict[index] = node
+            if node.isDeadEnd():
+                self.deadends.append(index)
+
 
     def getStartPoint(self):
         if (len(self.nd_dict) < 2):
@@ -34,6 +39,9 @@ class Maze:
 
     def getNodeDict(self):
         return self.nd_dict
+    
+    def getDeadend(self):
+        return self.deadends
 
     def BFS(self, nd:Node):
         # TODO : design your data structure here for your algorithm

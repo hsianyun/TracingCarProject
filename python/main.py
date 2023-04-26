@@ -26,13 +26,13 @@ class RFIDthread(threading.Thread):
 
 
 def main():
-    maze = mz.Maze("./data/maze_8by6.csv") 
-    point = Scoreboard("Never gonna give you up", "http://140.112.175.18:3000")
-    # point = ScoreboardFake("your team name", "data/fakeUID.csv")
+    maze = mz.Maze("./data/medium_maze.csv") 
+    # point = Scoreboard("Never gonna give you up", "http://140.112.175.18:3000")
+    point = ScoreboardFake("your team name", "data/fakeUID.csv")
     interf = BTinterface()
     # TODO : Initialize necessary variables
 
-    bfs_list = maze.BFS_2(3,48)
+    bfs_list = maze.BFS_2(9,10)
     cmd_str = maze.getActions(bfs_list)
 
     print("Finish counting. Waiting for car...")
@@ -53,9 +53,9 @@ def main():
     print(f'Send cmd_str: {cmd_str}')
     
     interf.start()
-    point.socket.start_game({ 
-                'gamemode': point.game, 
-                'team': point.team })
+    # point.socket.start_game({ 
+    #             'gamemode': point.game, 
+    #             'team': point.team })
 
     
     if (sys.argv[1] == '0'):
@@ -68,7 +68,8 @@ def main():
         print("Mode 1: Self-testing mode.")
         # TODO: You can write your code to test specific function.
         while True:
-            uid = BTinterface.get_UID()
+            uid = interf.get_UID()
+            uid = str(uid)[2:]
             if uid:
                 print(f'Get UID: {uid}')
                 point.add_UID(uid)     #upload uid to scoreboard

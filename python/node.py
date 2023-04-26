@@ -68,6 +68,19 @@ class Node:
             if succ[0] == nd: 
                 return True
         return False
+    
+    def isDeadEnd(self) -> bool:
+        adjacency = self.getAdjacency()
+        nd_count = 0
+        for ndIndex in adjacency:
+            try:
+                if isinstance(ndIndex, int) and ndIndex > 0:
+                    nd_count += 1
+            except:
+                pass
+        if nd_count <= 1:
+            return True
+        return False
 
     @staticmethod
     def reverseDir(dir):
