@@ -51,8 +51,8 @@ void MotorInverter(int motor, bool& dir) {
 void tracking(int l2, int l1, int m0, int r1, int r2){
   // find your own parameters!
   double _w0 = 0;
-  double _w1 = 0.5;
-  double _w2 = 1;
+  double _w1 = 0.4;
+  double _w2 = 0.8;
   double _Kp = l2+l1+m0+r1+r2;
   double _Kd; // d term parameter (optional) 
   double _Ki; // i term parameter (optional) (Hint: 不要調太大)

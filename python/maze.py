@@ -26,7 +26,7 @@ class Maze:
         self.deadends = list()
         for node in self.nodes:  
             self.nd_dict[node.getIndex()] = node
-        self.startNode = int(input("Please enter the start point"))
+        self.startNode = int(input("Please enter the start point: "))
         self.startNode = self.nd_dict[self.startNode]
         for node in self.nodes:
             node.countPoint(self.startNode)
@@ -188,16 +188,13 @@ class Maze:
                 if i not in went:
                     self.initNodes()
                     sequence = self.BFS_2(start_nd, self.nd_dict[i])
-                    print(sequence)
                     bfs_len = len(sequence)
-                    print('i and start_nd', i, start_nd.getIndex(), bfs_len)
                     if bfs_len < dist:
                         dist = bfs_len
                         next_nd = i #index of node
             # print(self.getDeadend())
             went += [next_nd]
             node_walk.append(self.nd_dict[next_nd])
-            print(node_walk)
 
             return(self.strategy(next_nd, went, node_walk))
         else:

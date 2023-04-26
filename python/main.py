@@ -26,14 +26,15 @@ class RFIDthread(threading.Thread):
 
 
 def main():
-    maze = mz.Maze("./data/medium_maze.csv") 
-    # point = Scoreboard("Never gonna give you up", "http://140.112.175.18:3000")
-    point = ScoreboardFake("your team name", "data/fakeUID.csv")
+    maze = mz.Maze("./python/data/big_maze_111.csv") 
+    point = Scoreboard("Never gonna give you up", "http://140.112.175.18:3000")
+    # point = ScoreboardFake("your team name", "data/fakeUID.csv")
     interf = BTinterface()
     # TODO : Initialize necessary variables
 
-    bfs_list = maze.BFS_2(9,10)
-    cmd_str = maze.getActions(bfs_list)
+    bfs_list = maze.nodePlanner(maze.startNode)
+    cmd_str = maze.getActions(bfs_list)[1:]
+    
 
     print("Finish counting. Waiting for car...")
 
@@ -53,15 +54,21 @@ def main():
     print(f'Send cmd_str: {cmd_str}')
     
     interf.start()
-    # point.socket.start_game({ 
-    #             'gamemode': point.game, 
-    #             'team': point.team })
+    point.socket.start_game({ 
+                'gamemode': point.game, 
+                'team': point.team })
 
     
     if (sys.argv[1] == '0'):
         print("Mode 0: for treasure-hunting")
         # TODO : for treasure-hunting, which encourages you to hunt as many scores as possible
-        
+        while True:
+            uid = interf.get_UID()
+            uid = str(uid)[2:]
+            if uid:
+                print(f'Get UID: {uid}')
+                point.add_UID(uid)     #upload uid to scoreboard
+                print("score:", point.getCurrentScore()) 
 
         
     elif (sys.argv[1] == '1'):

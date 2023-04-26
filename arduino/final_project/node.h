@@ -25,27 +25,27 @@ bool in_the_node(int l2, int l1, int m0, int r1, int r2)  {
 }
 
 void left_turn()  {
-  vL = 130;
+  vL = 110;
   vR = 255;
   MotorWriting(vL, vR);
-  delay(1000);   //Needed to be modified.
+  delay(950);   //Needed to be modified.
 }
 void right_turn() {
   vL = 255;
-  vR = 130;
+  vR = 120;
   MotorWriting(vL, vR);
-  delay(1000);   //Needed to be modified.
+  delay(950);   //Needed to be modified.
 }
 void reverse_turn() {
   vL =  200;
   vR = -200;
   MotorWriting(vL, vR);
-  delay(800);   //Needed to be modified.
+  delay(600);   //Needed to be modified.
 }
 void go_straight()  {
   vL = 200;
   vR = 200;
   MotorWriting(vL, vR);
-  delay(850);   //Needed to be modified.
+  delay(600);   //Needed to be modified.
 }
 // here are something you can try: left_turn, right_turn... etc.

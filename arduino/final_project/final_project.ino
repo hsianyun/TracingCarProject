@@ -6,7 +6,7 @@
 // Modify     [2020/03/27 Erik Kuo]
 /***************************************************************************/
 
-#define DEBUG
+#define DEBUG 1
 // debug flag
 
 // for RFID
@@ -135,6 +135,9 @@ void loop()
   }
   else Search();
   SetState(&state);
+  // SetState(&state, &inCenter);
+
+
 }
 
 void SetState(int *state, int *inCenter)
@@ -172,18 +175,18 @@ void SetState(int *state) {
     */
     // *state = 0;
 
-    int direction = int(path[step_num])-48;
+    int direction = int(path[step_num]);
     step_num += 1;
     switch(direction) {
       case 0:
         *state = 0;  break;
-      case 1:
+      case 102: //f
         *state = 1; go_straight();  break;
-      case 2:
+      case 98:  //b
         *state = 1; reverse_turn(); break;
-      case 3:
+      case 108: //l
         *state = 1; left_turn();  break;
-      case 4:
+      case 114: //r
         *state = 1; right_turn(); break;
     }
   }

@@ -17,8 +17,8 @@
 # # print(d)
 
 from maze import Maze
-
-filepath = r".\data\maze_4by4.csv"
+import os
+filepath = os.path.join(os.getcwd(), r'.\python\data\big_maze_111.csv')
 maze1 = Maze(filepath)
 # bfs_list = maze1.BFS_2(3,48)
 # print(maze1.nd_dict)
