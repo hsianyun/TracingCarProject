@@ -180,7 +180,7 @@ class Maze:
             next_nd = 0
             for i in self.getDeadend():
                 if i not in went:
-                    if dist(start_nd, i) < dist:
+                    if len(self.BFS(start_nd, i)) < dist and start_nd.getpoint < i.countpoint:
                         next_nd = i #index of node
             went += [next_nd]
             node_walk += [next_nd]
