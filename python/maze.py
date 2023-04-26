@@ -24,17 +24,14 @@ class Maze:
         self.nodes = [Node(int(raw_node[0]), raw_node[1:5]) for raw_node in self.raw_data]
         self.nd_dict = dict()  # key: index, value: the correspond node
         self.deadends = list()
-        self.startNode = input("Please enter the start point")
-        try:
-            self.startNode = self.nd_dict[self.startNode]
-        except:
-            print("Please enter an integer between 1 ~ 48!")
+        for node in self.nodes:  
+            self.nd_dict[node.getIndex()] = node
+        self.startNode = int(input("Please enter the start point"))
+        self.startNode = self.nd_dict[self.startNode]
         for node in self.nodes:
             node.countPoint(self.startNode)
-            index = node.getIndex()
-            self.nd_dict[index] = node
             if node.isDeadEnd():
-                self.deadends.append(index)
+                self.deadends.append(node.getIndex())
 
 
     def getStartPoint(self):
@@ -104,6 +101,7 @@ class Maze:
             print("Parameter 'nd' wrong type!")
             return 0
         
+        
         bfs_queue = [start_node]
         start_node.Successors=[(None, None, 0)] #initiallize the start node
 
@@ -131,13 +129,13 @@ class Maze:
                 except:
                     pass
 
-        return None
+        return []
 
     def getAction(self, car_dir, nd_from:Node, nd_to:Node):
         # TODO : get the car action
         # Tips : return an action and the next direction of the car if the nd_from is the Successor of nd_to
 		# If not, print error message and return 0
-        if not nd_to.isSuccessor(nd_from):
+        if not (nd_from.getIndex() in nd_to.getAdjacency()):
             print(f"Node{nd_from.getIndex()} is not the Successor of the node{nd_to.getIndex()}")
             print(nd_to.getSuccessors()[-1][0].getIndex())
             return 0
@@ -169,7 +167,7 @@ class Maze:
         # Tips : iterate through the nodes and use getAction() in each iteration
         cmd_str = 'f'
         for i in range(1,len(nodes)-1):
-            cmd_str += self.getAction(nodes[i].getSuccessors()[-1][1], nodes[i], nodes[i+1])
+            cmd_str += self.getAction(nodes[i-1].getDirection(nodes[i]), nodes[i], nodes[i+1])
         return cmd_str
 
     def actions_to_str(self, actions):
@@ -180,18 +178,28 @@ class Maze:
         print(cmds)
         return cmds
     
-    def strategy(self, start_nd, went:list, node_walk:list):
+    def strategy(self, start_nd, went=[], node_walk=[]):
+        if isinstance(start_nd, int):
+            start_nd = self.nd_dict[start_nd]
         if len(went) != len(self.deadends):
             dist = 100
             next_nd = 0
             for i in self.getDeadend():
                 if i not in went:
-                    if len(self.BFS(start_nd, i)) < dist and start_nd.getPoint() < i.getPoint():
-                        dist = len(self.BFS(start_nd, i))
+                    self.initNodes()
+                    sequence = self.BFS_2(start_nd, self.nd_dict[i])
+                    print(sequence)
+                    bfs_len = len(sequence)
+                    print('i and start_nd', i, start_nd.getIndex(), bfs_len)
+                    if bfs_len < dist:
+                        dist = bfs_len
                         next_nd = i #index of node
+            # print(self.getDeadend())
             went += [next_nd]
-            node_walk += [next_nd]
-            return(self.strategy(next_nd, went:list, node_walk))
+            node_walk.append(self.nd_dict[next_nd])
+            print(node_walk)
+
+            return(self.strategy(next_nd, went, node_walk))
         else:
             return node_walk
         
@@ -204,4 +212,12 @@ class Maze:
     def strategy_2(self, nd_from, nd_to):
         return self.BFS_2(nd_from, nd_to)
 
-    
+    def nodePlanner(self, start_nd):
+        node_sequence = self.strategy(start_nd)
+        node_path = [start_nd]
+        for i in range(1,len(node_sequence)):
+            self.initNodes()
+            node_path += self.BFS_2(node_sequence[i-1], node_sequence[i])[1:]
+        bfs_index = [nd.getIndex() for nd in node_sequence ]
+        print(bfs_index)
+        return node_path

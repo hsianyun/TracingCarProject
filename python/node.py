@@ -85,11 +85,8 @@ class Node:
         adjacency = self.getAdjacency()
         nd_count = 0
         for ndIndex in adjacency:
-            try:
-                if isinstance(ndIndex, int) and ndIndex > 0:
-                    nd_count += 1
-            except:
-                pass
+            if ndIndex > 0:
+                nd_count += 1
         if nd_count <= 1:
             return True
         return False

@@ -18,11 +18,14 @@
 
 from maze import Maze
 
-filepath = r".\python\data\maze_8by6.csv"
+filepath = r".\data\maze_4by4.csv"
 maze1 = Maze(filepath)
-bfs_list = maze1.BFS_2(3,48)
+# bfs_list = maze1.BFS_2(3,48)
 # print(maze1.nd_dict)
-bfs_index = [nd.getIndex() for nd in bfs_list ]
+# print(maze1.getDeadend())
+node_list = maze1.nodePlanner(maze1.startNode)
+print(node_list)
+bfs_index = [nd.getIndex() for nd in node_list ]
 print(bfs_index)
-cmd = maze1.getActions(bfs_list)
+cmd = maze1.getActions(node_list)
 print(cmd)
