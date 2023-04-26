@@ -27,19 +27,19 @@ class RFIDthread(threading.Thread):
 
 def main():
     maze = mz.Maze("./python/data/big_maze_111.csv") 
-    point = Scoreboard("Never gonna give you up", "http://140.112.175.18:3000")
+    point = Scoreboard("Subscribe Dhgf!!", "http://140.112.175.18:3000")
     # point = ScoreboardFake("your team name", "data/fakeUID.csv")
     interf = BTinterface()
     # TODO : Initialize necessary variables
 
     bfs_list = maze.nodePlanner(maze.startNode)
     cmd_str = maze.getActions(bfs_list)[1:]
+    cmd_str = cmd_str + 's'
     
 
     print("Finish counting. Waiting for car...")
 
     read = interf.ser.SerialReadByte()
-    print(f'read={read}')
 
     while True:
         

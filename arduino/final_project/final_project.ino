@@ -77,7 +77,7 @@ void setup()
   long time = millis();
 
   while(!read_path){
-    if(millis()-time >= 500){
+    if(millis()-time >= 750){
       send_msg("path");
       time = millis();
       // Serial.println("Send request");
@@ -188,6 +188,8 @@ void SetState(int *state) {
         *state = 1; left_turn();  break;
       case 114: //r
         *state = 1; right_turn(); break;
+      case 115: //s
+        *state = 0; break;
     }
   }
   else  {
