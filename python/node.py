@@ -18,6 +18,9 @@ class Node:
         self.adjacency_nd = list(Adjacency_nd)    #store the index of adjacency nodes in the sequence: North, South, West, East
         # store successor as (Node, direction to node, distance)
         self.Successors = []
+        self.point = 0
+        self.col = self.index // 6 + 1
+        self.row = self.index % 6 if self.index % 6 > 0 else 6
 
     def __hash__(self) -> int:
         return self.index
@@ -26,6 +29,15 @@ class Node:
         if not isinstance(__value, Node):
             return False
         return self.index == __value.index
+    
+    def getNodeCoordinate(self):
+        return (self.col, self.row)
+
+    def initSuccessors(self):
+        self.Successors = list()
+
+    def getPoint(self):
+        return self.point
 
     def getIndex(self):
         return self.index
@@ -81,6 +93,11 @@ class Node:
         if nd_count <= 1:
             return True
         return False
+    
+    def countPoint(self, startNode):
+        start_col, start_row = startNode.getNodeCoordinate()
+        x_dis = abs(start_col - self.col)
+
 
     @staticmethod
     def reverseDir(dir):
