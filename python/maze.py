@@ -174,13 +174,19 @@ class Maze:
         print(cmds)
         return cmds
     
-    def strategy(self, start_nd, ):
-        dist = 100
-        next_nd = Node()
-        for i in deadend:
-            if dist(start_nd, i) < dist:
-                next_nd = i
-        return self.BFS(start_nd)
+    def strategy(self, start_nd, went:list, node_walk:list):
+        if len(went) != len(self.deadends):
+            dist = 100
+            next_nd = 0
+            for i in self.getDeadend():
+                if i not in went:
+                    if dist(start_nd, i) < dist:
+                        next_nd = i #index of node
+            went += [next_nd]
+            node_walk += [next_nd]
+            return(self.strategy(next_nd, went:list, node_walk))
+        else:
+            return node_walk
 
     def strategy_2(self, nd_from, nd_to):
         return self.BFS_2(nd_from, nd_to)
