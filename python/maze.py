@@ -187,17 +187,10 @@ class Maze:
             return(self.strategy(next_nd, went:list, node_walk))
         else:
             return node_walk
+        
     def initNodes(self):
         for node in self.nodes:
             node.initSuccessors()
-    
-    def strategy(self, start_nd, ):
-        dist = 100
-        next_nd = Node()
-        for i in deadend:
-            if dist(start_nd, i) < dist:
-                next_nd = i
-        return self.BFS(start_nd)
 
     def strategy_2(self, nd_from, nd_to):
         return self.BFS_2(nd_from, nd_to)
