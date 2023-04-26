@@ -174,6 +174,10 @@ class Maze:
         print(cmds)
         return cmds
     
+    def initNodes(self):
+        for node in self.nodes:
+            node.initSuccessors()
+    
     def strategy(self, start_nd, ):
         dist = 100
         next_nd = Node()
