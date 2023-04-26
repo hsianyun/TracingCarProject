@@ -24,7 +24,13 @@ class Maze:
         self.nodes = [Node(int(raw_node[0]), raw_node[1:5]) for raw_node in self.raw_data]
         self.nd_dict = dict()  # key: index, value: the correspond node
         self.deadends = list()
+        self.startNode = input("Please enter the start point")
+        try:
+            self.startNode = self.nd_dict[self.startNode]
+        except:
+            print("Please enter an integer between 1 ~ 48!")
         for node in self.nodes:
+            node.countPoint(self.startNode)
             index = node.getIndex()
             self.nd_dict[index] = node
             if node.isDeadEnd():

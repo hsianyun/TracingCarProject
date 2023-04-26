@@ -97,6 +97,8 @@ class Node:
     def countPoint(self, startNode):
         start_col, start_row = startNode.getNodeCoordinate()
         x_dis = abs(start_col - self.col)
+        y_dis = abs(start_row - self.row)
+        self.point = round((x_dis**2 + y_dis**2)**0.5)
 
 
     @staticmethod
