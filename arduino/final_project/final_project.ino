@@ -73,11 +73,15 @@ void setup()
   for (int i = 0 ;i < 100; i++)
     path[i] = '\0';
 
-  send_msg("path");
-  
   bool read_path = false;
+  long time = millis();
 
   while(!read_path){
+    if(millis()-time >= 500){
+      send_msg("path");
+      time = millis();
+      // Serial.println("Send request");
+    }
     int str_len = Serial3.available();
     if(str_len > 0){
       delay(100);
@@ -86,8 +90,9 @@ void setup()
     }
   }
   #ifdef DEBUG
-  send_msg("Path received! The command is:");
-  send_msg(path);
+  Serial.print("Path received! The command is:");
+  Serial.println(path);
+  
   #endif
 
   BT_CMD bt_start;
@@ -99,8 +104,6 @@ void setup()
   #ifdef DEBUG
   Serial.println("Start!");
   #endif
-
-  send_msg("path"); 
 }
 /*============setup============*/
 
@@ -180,7 +183,7 @@ void SetState(int *state) {
       case 2:
         *state = 1; reverse_turn(); break;
       case 3:
-        *state = 1; left_turn(); break;
+        *state = 1; left_turn();  break;
       case 4:
         *state = 1; right_turn(); break;
     }

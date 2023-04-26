@@ -56,13 +56,17 @@ char* read_msg() {
   char* msg = new char[100];
   for (int i = 0; i < 100; i++)
     msg[i] = '\0';
-  if (Serial3.available())  {
-    int charLength = Serial3.available();
-    for(int i=0; i<charLength; i++){
+  int charLength = Serial3.available();
+  if (charLength)  {
+    for(int i = 0; i < charLength; i++){
       msg[i] = Serial3.read();
     }
+    #ifdef DEBUG
+    Serial.print("Testing read_msg():");
+    Serial.println(msg);
+    #endif
   }
-  return *msg;
+  return msg;
 }
 
 // send UID back through Serial3(bluetooth serial)
