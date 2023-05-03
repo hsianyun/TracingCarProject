@@ -100,10 +100,16 @@ void setup()
     bt_start = ask_BT();
     if(bt_start == 5)
       start = true;
+      long cur_time = millis();
   }
   #ifdef DEBUG
   Serial.println("Start!");
   #endif
+  while(true){
+    if(millis() - cur_time >= 5000){
+      break;
+    }
+  }
 }
 /*============setup============*/
 
