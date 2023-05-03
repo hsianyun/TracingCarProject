@@ -192,6 +192,9 @@ class Maze:
                     if bfs_len < dist:
                         dist = bfs_len
                         next_nd = i #index of node
+                    elif bfs_len == dist:
+                        if self.nd_dict[i].getPoint() < self.nd_dict[next_nd].getPoint():
+                            next_nd = i
             # print(self.getDeadend())
             went += [next_nd]
             node_walk.append(self.nd_dict[next_nd])
