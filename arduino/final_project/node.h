@@ -28,19 +28,19 @@ void left_turn()  {
   vL = 110;
   vR = 255;
   MotorWriting(vL, vR);
-  delay(950);   //Needed to be modified.
+  delay(800);   //Needed to be modified.
 }
 void right_turn() {
   vL = 255;
   vR = 120;
   MotorWriting(vL, vR);
-  delay(950);   //Needed to be modified.
+  delay(800);   //Needed to be modified.
 }
 void reverse_turn() {
   vL =  200;
   vR = -200;
   MotorWriting(vL, vR);
-  delay(600);   //Needed to be modified.
+  delay(575);   //Needed to be modified.
 }
 void go_straight()  {
   vL = 200;

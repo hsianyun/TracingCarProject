@@ -59,7 +59,7 @@ def main():
                 'team': point.team })
 
     
-    if (sys.argv[1] == '0'):
+    if (True):
         print("Mode 0: for treasure-hunting")
         # TODO : for treasure-hunting, which encourages you to hunt as many scores as possible
         while True:
