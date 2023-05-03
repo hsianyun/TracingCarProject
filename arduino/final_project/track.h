@@ -69,11 +69,11 @@ void tracking(int l2, int l1, int m0, int r1, int r2){
     vL = 200;
     vR = 0;
   }
-  if(vL>250){
-    vL = 250;
+  if(vL>255){
+    vL = 255;
   }
-  if(vR>250){
-    vR = 250;
+  if(vR>255){
+    vR = 255;
   }
   // end TODO
   MotorWriting(adj_L*vL, adj_R*vR);
