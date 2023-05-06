@@ -32,9 +32,9 @@ void left_turn()  {
 }
 void right_turn() {
   vL = 255;
-  vR = 120;
+  vR = 110;
   MotorWriting(vL, vR);
-  delay(800);   //Needed to be modified.
+  delay(825);   //Needed to be modified.
 }
 void reverse_turn() {
   vL =  200;

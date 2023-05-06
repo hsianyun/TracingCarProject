@@ -94,13 +94,13 @@ void setup()
   Serial.println(path);
   
   #endif
-
+  long cur_time;
   BT_CMD bt_start;
   while(!start){
     bt_start = ask_BT();
     if(bt_start == 5)
       start = true;
-      long cur_time = millis();
+      cur_time = millis();
   }
   #ifdef DEBUG
   Serial.println("Start!");
